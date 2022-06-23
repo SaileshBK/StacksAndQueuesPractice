@@ -7,7 +7,7 @@ namespace StacksAndQueuesPractice
     public class Bus
     {
         // list of passenger currently on the bus.
-        private Stack<Passenger> _passenger = new Stack<Passenger>();
+        private LinkedList<Passenger> _passenger = new LinkedList<Passenger>();
         // max number of people bus can hold.
         private const int Capacity = 5;
         // this returns the remaining seat left.
@@ -18,23 +18,38 @@ namespace StacksAndQueuesPractice
         {
             if (Space < 1)
                 return false;
-            // in stack we use Push to add item and pop to remove item from Stack.
-            _passenger.Push(passenger);
+            // in LinkedList AddLast is used to add item to the end of the list. However, we can also use AddFirst to add item to the first.
+            _passenger.AddLast(passenger);
             Console.WriteLine($"{passenger} goes to the bus");
             return true;
         }
 
-        public void ArrivedAtTerminus()
+        public void ArrivedAt(string place)
         {
-            Console.WriteLine($"\r\nBus arriving at terminus");
-            // loop to get each passenger get off.
-            while (_passenger.Count > 0)
+            Console.WriteLine($"\r\nBus arriving at {place}");
+            // checking if anyone in the bus.
+            if (_passenger.Count == 0)
+                return;
+            // identifying all the passengers who are getting off here from the linked list. 
+            // here getting first item in LinkedList and storing in local variable currentNode.
+            LinkedListNode<Passenger> currentNode = _passenger.First;
+
+            do
             {
-                // removes the next item from the Stack. It will choose the item that is most recently added.
-                Passenger passenger = _passenger.Pop();
-                Console.WriteLine($"{passenger} got off the bus");
-            }
-            Console.WriteLine($"There are {_passenger.Count} people still on the bus");
+                // here .Next property looks up and temporarily stores the next node.
+                LinkedListNode<Passenger> nextNode = currentNode.Next;
+                // LinkedList.Value gives here the passenger instance and we are checking if the passenger destination matches.
+                if (currentNode.Value.Destination == place)
+                {
+                    Console.WriteLine($"{currentNode.Value} is getting off");
+                    // removing item from the LinkedList.
+                    _passenger.Remove(currentNode);
+                }
+                // this runs untill the currentNode becomes null.
+                currentNode = nextNode;
+
+            } while (currentNode != null);
+            Console.WriteLine($"{_passenger.Count} people left on bus");
         }
     }
 }
