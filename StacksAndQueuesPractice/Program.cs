@@ -15,6 +15,8 @@ namespace StacksAndQueuesPractice
                 busStop.PassengerArrive(PassengerGenerator.CreatePassenger());
             // pick up passenger it can
             busStop.BusArrive(bus);
+            // dropping up passenger from the bus.
+            bus.ArrivedAtTerminus();
             
         }
     }
